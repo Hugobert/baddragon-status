@@ -1,0 +1,72 @@
+<html>
+<head>
+  <title>Bad Dragon Status</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css?family=Roboto');
+
+  html {
+    font-family: 'Roboto', sans-serif;
+    background-color: #34383e;
+    color: #c1c2c5;
+    margin: 0px;
+  }
+
+  body {
+    margin: 0;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+  }
+
+  input[type=text] {
+    width: 200px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+    border-radius: 12px;
+    font-size: 18px;
+    border: 1px solid #222;
+    height: 45px;
+    line-height: 45px;
+    background-color: rgba(0,0,0,0.5);
+    padding-left: 15px;
+    padding-right: 15px;
+    color: #c1c2c5;
+  }
+
+  input[type=text]:focus {
+    width: 500px;
+    color: #c1c2c5;
+  }
+
+  input[type=submit] {
+    background-color: rgba(55,55,55,0.5);
+    color: white;
+    font-size: 18px;
+    border: 1px solid #444;
+    display: block;
+    margin: 20px auto;
+    padding: 15px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.5s;
+    width: 200px;
+  }
+
+  input[type=submit]:hover {
+    background-color: rgba(255,55,55,0.8);
+    transform: translate(5px,0px);
+  }
+
+  </style>
+</head>
+<body>
+
+<form action="status.php" method="post">
+<input type="text" name="id" placeholder="Order ID"><br>
+<input type="text" name="token" placeholder="Token"><br>
+<input type="submit">
+</form>
+
+</body>
+</html>
