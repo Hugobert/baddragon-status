@@ -53,7 +53,8 @@ function get_remote_data($url, $post_paramtrs = false) {
                 return call_user_func($t[0]["function"], trim($redirURL), $post_paramtrs);
             }
         }
-    } return "ERRORCODE22 with $url!!<br/>Last status codes<b/>:" . json_encode($status) . "<br/><br/>Last data got<br/>:$data";
+//    } return "ERRORCODE22 with $url!!<br/>Last status codes<b/>:" . json_encode($status) . "<br/><br/>Last data got<br/>:$data";
+      } return $data; 
 }
 
 ?>
