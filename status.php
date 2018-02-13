@@ -1,6 +1,13 @@
 <!doctype html>
 <html lang="de">
   <head>
+
+    <?php
+      if(!$_POST["id"] || !$_POST["token"]) {
+        exit;
+      }
+    ?>
+
     <title>Bad Dragon Status</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -8,23 +15,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <style>
-      body {background-color:#c1c2c5;}
-      .img-responsive{max-width:100%;max-height:200px;}
-      .jumbotron{background-color:#25292e;color:#c1c2c5;border-radius:0px;}
-      .intermediate{text-align:center;color:#25292e;font-weight:bold;}
-      .list-group-item{background-color:#25292e}
+      body {
+        background-color:#c1c2c5;
+      }
+      .img-responsive{
+        max-width:100%;
+        max-height:200px;
+      }
+      .jumbotron{
+        background-color:#25292e;
+        color:#c1c2c5;
+        border-radius:0px;
+      }
+      .intermediate{
+        text-align:center;
+        color:#25292e;
+        font-weight:bold;
+      }
+      .list-group-item{
+        background-color:#25292e
+      }
 
       @keyframes loading {
           from {width:0%;}
           to {width:100%;}
       }
 
-      /* The element to apply the animation to */
       .progress-bar {
           animation-name: loading;
           animation-duration: 3s;
       }
-
     </style>
   </head>
   <body>
@@ -71,157 +91,134 @@
 
 
     <script>
-
-      var content="";
       function reqListener () {
         console.log(this.responseText);
       }
 
-      var oReq = new XMLHttpRequest(); //New request object
+      var oReq = new XMLHttpRequest();
       oReq.onload = function() {
-      //This is where you handle what to do with the response.
-      //The actual data is found on this.responseText
-
-        //alert(this.responseText);
-        //document.getElementById("content").innerHTML=this.responseText;
-        //content=this.responseText;
-
         var getstring = "get.php?id="+"<?php echo $_POST["id"]; ?>"+"&token="+"<?php echo $_POST["token"]; ?>";
         $.getJSON(getstring, function(data) {
-          // data is the JSON string
-          document.getElementById("id").innerHTML=data["id"];
-          //document.getElementById("customToys.length").innerHTML=data["customToys"].length;
-          //document.getElementById("inventoryItems.length").innerHTML=data["inventoryItems"].length;
-          document.getElementById("allitems.length").innerHTML=data["customToys"].length+data["inventoryItems"].length;
-          document.getElementById("orderStatus.externalName").innerHTML=data["orderStatus"]["externalName"];
-          document.getElementById("orderStatus.externalDesc").innerHTML=data["orderStatus"]["externalDesc"];
-          document.getElementById("firstname").innerHTML=lower(data["shippingAddress"]["firstname"]);
-          document.getElementById("lastname").innerHTML=lower(data["shippingAddress"]["lastname"]);
-          document.getElementById("address1").innerHTML=lower(data["shippingAddress"]["address1"]);
-          document.getElementById("zipcode").innerHTML=data["shippingAddress"]["zipcode"];
-          document.getElementById("city").innerHTML=lower(data["shippingAddress"]["city"]);
-          document.getElementById("loading").style.display="none";
+          if (data["error"]) {
+            document.getElementById("loading").innerHTML="<strong>There was a problem:</strong><br>"+data["error"];
+          } else {
+            document.getElementById("loading").style.display="none";
+            document.getElementById("id").innerHTML=data["id"];
+            document.getElementById("allitems.length").innerHTML=data["customToys"].length+data["inventoryItems"].length;
+            document.getElementById("orderStatus.externalName").innerHTML=data["orderStatus"]["externalName"];
+            document.getElementById("orderStatus.externalDesc").innerHTML=data["orderStatus"]["externalDesc"];
+            document.getElementById("firstname").innerHTML=lower(data["shippingAddress"]["firstname"]);
+            document.getElementById("lastname").innerHTML=lower(data["shippingAddress"]["lastname"]);
+            document.getElementById("address1").innerHTML=lower(data["shippingAddress"]["address1"]);
+            document.getElementById("zipcode").innerHTML=data["shippingAddress"]["zipcode"];
+            document.getElementById("city").innerHTML=lower(data["shippingAddress"]["city"]);
+            for (var i=0;i<data["customToys"].length;i++) {
+              var statuscode=data["customToys"][i]["status"];
+              switch (statuscode) {
+                case 3:
+                var statusdesc = "Queued for production";
+                break;
+                case 16:
+                var statusdesc = "Packing your order right now";
+                break;
+                case 23:
+                var statusdesc = "Shipped";
+                break;
+                case 80:
+                var statusdesc = "Cancelled";
+                break;
+                case 87:
+                var statusdesc = "QA failed, will retry";
+                break;
+                case 90:
+                var statusdesc = "Reserved in warehouse";
+                break;
+                case 4:
+                var statusdesc = "In production + curing";
+                break;
+                case 11:
+                var statusdesc = "Production finished, waiting to be moved to QA queue";
+                break;
+                case 12:
+                var statusdesc = "In QA queue";
+                break;
+                case 13:
+                var statusdesc = "QA underway";
+                break;
+                case 92:
+                var statusdesc = "waiting to be inspected by QA";
+                default:
+                var statusdesc = "No description available";
+              }
 
-          for (var i=0;i<data["customToys"].length;i++) {
-            var statuscode=data["customToys"][i]["status"];
-            switch (statuscode) {
-              case 3:
-              var statusdesc = "Queued for production";
-              break;
+              if (data["customToys"][i]["cumtube"]==0){
+                var cumtube='<li class="list-group-item">Without cumtube</li>';
+              }
+              else if (data["customToys"][i]["cumtube"]==1){
+                var cumtube='<li class="list-group-item">With cumtube</li>';
+              }
+              else{
+                var cumtube="";
+              }
 
-              case 16:
-              var statusdesc = "Packing your order right now";
-              break;
+              if (data["customToys"][i]["suctioncup"]==0){
+                var suctioncup='<li class="list-group-item">Without suction cup</li>';
+              }
+              else if (data["customToys"][i]["suctioncup"]==1){
+                var suctioncup='<li class="list-group-item">With suction cup</li>';
+              }
+              else{
+                var suctioncup="";
+              }
 
-              case 23:
-              var statusdesc = "Shipped";
-              break;
-
-              case 80:
-              var statusdesc = "Cancelled";
-              break;
-
-              case 87:
-              var statusdesc = "QA failed, will retry";
-              break;
-
-              case 90:
-              var statusdesc = "Reserved in warehouse";
-              break;
-
-              case 4:
-              var statusdesc = "In production + curing";
-              break;
-
-              case 11:
-              var statusdesc = "Production finished, waiting to be moved to QA queue";
-              break;
-
-              case 12:
-              var statusdesc = "In QA queue";
-              break;
-
-              case 13:
-              var statusdesc = "QA underway";
-              break;
-
-              case 92:
-              var statusdesc = "waiting to be inspected by QA";
-
-              default:
-              var statusdesc = "No description available";
+              document.getElementById("table1").insertAdjacentHTML( 'beforeend', '<tr><td><strong>'+data["customToys"][i]["productName"]+'</strong><br><img src="'+data["customToys"][i]["imageURL"]+'" class="img-responsive voc_list_preview_img"></td><td><ul class="list-group"><li class="list-group-item">Size: '+data["customToys"][i]["size"]+'</li><li class="list-group-item">Firmness: '+data["customToys"][i]["firmness"]+'</li><li class="list-group-item">Color: '+data["customToys"][i]["color"]+'</li>'+cumtube+suctioncup+'</ul></td><td>'+data["customToys"][i]["status"]+'<br>'+statusdesc+'</td></tr>');
             }
 
-            if (data["customToys"][i]["cumtube"]==0){var cumtube='<li class="list-group-item">Without cumtube</li>';}
-            else if (data["customToys"][i]["cumtube"]==1){var cumtube='<li class="list-group-item">With cumtube</li>';}
-            else{var cumtube="";}
-
-            if (data["customToys"][i]["suctioncup"]==0){var suctioncup='<li class="list-group-item">Without suction cup</li>';}
-            else if (data["customToys"][i]["suctioncup"]==1){var suctioncup='<li class="list-group-item">With suction cup</li>';}
-            else{var suctioncup="";}
-
-            document.getElementById("table1").insertAdjacentHTML( 'beforeend', '<tr><td><strong>'+data["customToys"][i]["productName"]+'</strong><br><img src="'+data["customToys"][i]["imageURL"]+'" class="img-responsive voc_list_preview_img"></td><td><ul class="list-group"><li class="list-group-item">Size: '+data["customToys"][i]["size"]+'</li><li class="list-group-item">Firmness: '+data["customToys"][i]["firmness"]+'</li><li class="list-group-item">Color: '+data["customToys"][i]["color"]+'</li>'+cumtube+suctioncup+'</ul></td><td>'+data["customToys"][i]["status"]+'<br>'+statusdesc+'</td></tr>');
-          }
-
-          for (var j=0;j<data["inventoryItems"].length;j++) {
-            var statuscodeInv=data["inventoryItems"][j]["status"];
-            switch (statuscodeInv) {
-              case 3:
-              var statusdescInv = "Queued for production";
-              break;
-
-              case 16:
-              var statusdescInv = "Packing your order right now";
-              break;
-
-              case 23:
-              var statusdescInv = "Shipped";
-              break;
-
-              case 80:
-              var statusdescInv = "Cancelled";
-              break;
-
-              case 87:
-              var statusdescInv = "QA failed, will retry";
-              break;
-
-              case 90:
-              var statusdescInv = "Reserved in warehouse";
-              break;
-
-              case 4:
-              var statusdescInv = "In production + curing";
-              break;
-
-              case 11:
-              var statusdescInv = "Production finished, waiting to be moved to QA queue";
-              break;
-
-              case 12:
-              var statusdescInv = "In QA queue";
-              break;
-
-              case 13:
-              var statusdescInv = "QA underway";
-              break;
-
-              case 92:
-              var statusdescInv = "waiting to be inspected by QA";
-
-              default:
-              var statusdescInv = "No description available";
+            for (var j=0;j<data["inventoryItems"].length;j++) {
+              var statuscodeInv=data["inventoryItems"][j]["status"];
+              switch (statuscodeInv) {
+                case 3:
+                var statusdescInv = "Queued for production";
+                break;
+                case 16:
+                var statusdescInv = "Packing your order right now";
+                break;
+                case 23:
+                var statusdescInv = "Shipped";
+                break;
+                case 80:
+                var statusdescInv = "Cancelled";
+                break;
+                case 87:
+                var statusdescInv = "QA failed, will retry";
+                break;
+                case 90:
+                var statusdescInv = "Reserved in warehouse";
+                break;
+                case 4:
+                var statusdescInv = "In production + curing";
+                break;
+                case 11:
+                var statusdescInv = "Production finished, waiting to be moved to QA queue";
+                break;
+                case 12:
+                var statusdescInv = "In QA queue";
+                break;
+                case 13:
+                var statusdescInv = "QA underway";
+                break;
+                case 92:
+                var statusdescInv = "waiting to be inspected by QA";
+                default:
+                var statusdescInv = "No description available";
+              }
+              document.getElementById("table2").insertAdjacentHTML( 'beforeend', '<tr><td><strong>'+data["inventoryItems"][j]["productName"]+'</strong><br><img src="'+data["inventoryItems"][j]["imageURL"]+'" class="img-responsive voc_list_preview_img"></td><td>'+data["inventoryItems"][j]["status"]+'<br>'+statusdescInv+'</td></tr>');
             }
-            document.getElementById("table2").insertAdjacentHTML( 'beforeend', '<tr><td><strong>'+data["inventoryItems"][j]["productName"]+'</strong><br><img src="'+data["inventoryItems"][j]["imageURL"]+'" class="img-responsive voc_list_preview_img"></td><td>'+data["inventoryItems"][j]["status"]+'<br>'+statusdescInv+'</td></tr>');
           }
-
         });
       };
 
       oReq.open("get", "get.php", true);
-      //                               ^ Don't block the rest of the execution.
-      //                                 Don't wait until the request finishes to
-      //                                 continue.
       oReq.send();
 
       function lower(string) {
