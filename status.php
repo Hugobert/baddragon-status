@@ -46,6 +46,22 @@
           animation-name: loading;
           animation-duration: 3s;
       }
+
+      #button {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+      }
+
+      #header {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 38px;
+        background-color: #25292e;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -265,5 +281,9 @@
       }
 
     </script>
+
+    <div id="header"><img src="https://i.imgur.com/wwazByf.png" height="100%"></div>
+    <div id="button"><a href="index.html"><button type="button" class="btn btn-danger">Go back</button></a></div>
+
   </body>
 </html>
