@@ -52,7 +52,7 @@
     <div class="jumbotron text-center">
       <p id="statustext" style="display:none;">
         Detailed status for order #<span id="id"></span><br>
-        from <span id="date"></span>
+        from <span id="date"></span> (<span id="daysago"></span> days ago)
       </p>
       <hr>
       <div id="loading">
@@ -125,7 +125,11 @@
             var m = withzero(date.getMinutes());
             var s = withzero(date.getSeconds());
             var datestring = year+"-"+month+"-"+day+" at "+h+":"+m;
+            var today = new Date();
+            var timeDiff = Math.abs(today.getTime() - date.getTime());
+            var daysago = Math.ceil(timeDiff / (1000 * 3600 * 24));
             document.getElementById("date").innerHTML=datestring;
+            document.getElementById("daysago").innerHTML=daysago;
             document.getElementById("allitems.length").innerHTML=data["customToys"].length+data["inventoryItems"].length;
             document.getElementById("orderStatus.externalName").innerHTML=data["orderStatus"]["externalName"];
             document.getElementById("orderStatus.externalDesc").innerHTML=data["orderStatus"]["externalDesc"];
