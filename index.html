@@ -1,72 +1,59 @@
-<html>
-<head>
-  <title>Bad Dragon Status</title>
-  <style>
-  @import url('https://fonts.googleapis.com/css?family=Roboto');
+<!doctype html>
+<html lang="de">
+  <head>
+    <title>Bad Dragon Status</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+      body {
+        background-color: #25292e;
+        color: #c1c2c5;
+        text-align: center;
+      }
 
-  html {
-    font-family: 'Roboto', sans-serif;
-    background-color: #34383e;
-    color: #c1c2c5;
-    margin: 0px;
-  }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <h1>Bad Dragon Status</h1>
+    </div>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col">
+        <form action="/status.php" method="post" name="form" onsubmit="return validateForm()">
+          <div class="form-group">
+            <label for="id">Your order ID:</label>
+            <input type="text" class="form-control" id="id" name="id" placeholder="XXXXXX">
+          </div>
+          <div class="form-group">
+            <label for="token">Token:</label>
+            <input type="text" class="form-control" id="token" name="token" placeholder="yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+      <div class="col"></div>
+    </div>
 
-  body {
-    margin: 0;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    text-align: center;
-  }
+    <script>
+    function validateForm() {
+      var vi = document.forms["form"]["id"].value;
+      var vt = document.forms["form"]["token"].value;
 
-  input[type=text] {
-    width: 200px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
-    border-radius: 12px;
-    font-size: 18px;
-    border: 1px solid #222;
-    height: 45px;
-    line-height: 45px;
-    background-color: rgba(0,0,0,0.5);
-    padding-left: 15px;
-    padding-right: 15px;
-    color: #c1c2c5;
-  }
+      if (vi == "") {
+        alert("Please enter an order ID");
+        return false;
+      }
+      if (vt == "") {
+        alert("Please enter a Token");
+        return false;
+      }
 
-  input[type=text]:focus {
-    width: 500px;
-    color: #c1c2c5;
-  }
+    }
+    </script>
 
-  input[type=submit] {
-    background-color: rgba(55,55,55,0.5);
-    color: white;
-    font-size: 18px;
-    border: 1px solid #444;
-    display: block;
-    margin: 20px auto;
-    padding: 15px 20px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.5s;
-    width: 200px;
-  }
-
-  input[type=submit]:hover {
-    background-color: rgba(255,55,55,0.8);
-    transform: translate(5px,0px);
-  }
-
-  </style>
-</head>
-<body>
-
-<form action="status.php" method="post">
-<input type="text" name="id" placeholder="Order ID"><br>
-<input type="text" name="token" placeholder="Token"><br>
-<input type="submit">
-</form>
-
-</body>
+  </body>
 </html>
