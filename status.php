@@ -160,7 +160,7 @@
             else if (data["customToys"][i]["suctioncup"]==1){var suctioncup='<li class="list-group-item">With suction cup</li>';}
             else{var suctioncup="";}
 
-            document.getElementById("table1").innerHTML='<tr><td><strong>'+data["customToys"][i]["productName"]+'</strong><br><img src="'+data["customToys"][i]["imageURL"]+'" class="img-responsive voc_list_preview_img"></td><td><ul class="list-group"><li class="list-group-item">Size: '+data["customToys"][i]["size"]+'</li><li class="list-group-item">Firmness: '+data["customToys"][i]["firmness"]+'</li><li class="list-group-item">Color: '+data["customToys"][i]["color"]+'</li>'+cumtube+suctioncup+'</ul></td><td>'+data["customToys"][i]["status"]+'<br>'+statusdesc+'</td></tr>'
+            document.getElementById("table1").insertAdjacentHTML( 'beforeend', '<tr><td><strong>'+data["customToys"][i]["productName"]+'</strong><br><img src="'+data["customToys"][i]["imageURL"]+'" class="img-responsive voc_list_preview_img"></td><td><ul class="list-group"><li class="list-group-item">Size: '+data["customToys"][i]["size"]+'</li><li class="list-group-item">Firmness: '+data["customToys"][i]["firmness"]+'</li><li class="list-group-item">Color: '+data["customToys"][i]["color"]+'</li>'+cumtube+suctioncup+'</ul></td><td>'+data["customToys"][i]["status"]+'<br>'+statusdesc+'</td></tr>');
           }
 
           for (var j=0;j<data["inventoryItems"].length;j++) {
@@ -212,7 +212,7 @@
               default:
               var statusdescInv = "No description available";
             }
-            document.getElementById("table2").innerHTML='<tr><td><strong>'+data["inventoryItems"][j]["productName"]+'</strong><br><img src="'+data["inventoryItems"][j]["imageURL"]+'" class="img-responsive voc_list_preview_img"></td><td>'+data["inventoryItems"][j]["status"]+'<br>'+statusdescInv+'</td></tr>'
+            document.getElementById("table2").insertAdjacentHTML( 'beforeend', '<tr><td><strong>'+data["inventoryItems"][j]["productName"]+'</strong><br><img src="'+data["inventoryItems"][j]["imageURL"]+'" class="img-responsive voc_list_preview_img"></td><td>'+data["inventoryItems"][j]["status"]+'<br>'+statusdescInv+'</td></tr>');
           }
 
         });
