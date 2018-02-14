@@ -119,6 +119,7 @@
       <thead>
         <tr>
           <th>Inventory Items</th>
+          <th>Details</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -270,7 +271,20 @@
                 default:
                 var statusdescInv = "No description available";
               }
-              document.getElementById("table2").insertAdjacentHTML( 'beforeend', '<tr><td><a href="https://bad-dragon.com/products/'+data["inventoryItems"][j]["sku"]+'" target="_blank"><strong>'+data["inventoryItems"][j]["productName"]+'</strong><br><img src="'+data["inventoryItems"][j]["imageURL"]+'" class="img-responsive voc_list_preview_img"></a></td><td>'+data["inventoryItems"][j]["status"]+'<br>'+statusdescInv+'</td></tr>');
+
+              var details="";
+
+              if(data["inventoryItems"][j]["sku"]=="cumlube" || data["inventoryItems"][j]["sku"]=="cumlubeclear"){
+                var predetails = '<ul class="list-group">';
+                var postdetails = '</ul>';
+              }
+
+              if (data["inventoryItems"][j]["sku"]=="cumlube"){
+                var cumlubesize = '<li class="list-group-item">Size: '+data["inventoryItems"][j]["options"][0].value+'</li>';
+                details = predetails + cumlubesize + postdetails;
+              }
+
+              document.getElementById("table2").insertAdjacentHTML( 'beforeend', '<tr><td><a href="https://bad-dragon.com/products/'+data["inventoryItems"][j]["sku"]+'" target="_blank"><strong>'+data["inventoryItems"][j]["productName"]+'</strong><br><img src="'+data["inventoryItems"][j]["imageURL"]+'" class="img-responsive voc_list_preview_img"></a></td><td>'+details+'</td><td>'+data["inventoryItems"][j]["status"]+'<br>'+statusdescInv+'</td></tr>');
             }
           }
         });
